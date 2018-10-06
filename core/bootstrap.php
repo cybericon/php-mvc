@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/base/constants.php";
+require_once CORE_DIR . "/base/functions.php";
 require_once BASE_DIR . "vendor/autoload.php";
 
 use Core\App;
