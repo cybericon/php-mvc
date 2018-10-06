@@ -1,0 +1,12 @@
+{
+    "database": {
+        "type": "mysql",
+        "host": "localhost",
+        "name": "database_name",
+        "user": "database_user",
+        "password": "database_password",
+        "options": {
+            "PDO::ATTR_ERRMODE": "PDO::ERRMODE_EXCEPTION"
+        }
+    }
+}

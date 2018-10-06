@@ -1,0 +1,20 @@
+{
+    "name": "cybericon/framework",
+    "description": "Simplest MVC framework to learn basic OOP and MVC in PHP",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Muhammad Furqan",
+            "email": "drmfurqan@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Core\\": "./core",
+            "App\\": "./app"
+        }
+    }
+}
