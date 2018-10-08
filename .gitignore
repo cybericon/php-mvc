@@ -1,6 +1,7 @@
 composer.phar
 config.json
 TODOs
+phpunit.xml
 /vendor/
 /node_module/
 /tests/
