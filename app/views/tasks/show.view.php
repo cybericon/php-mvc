@@ -12,7 +12,7 @@
         <?php endif;?>
         </h4>
     </li>
-    <li>
+    <li class="collection-item">
         <p>
         <?=$task->details?>
         </p>
