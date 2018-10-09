@@ -54,14 +54,14 @@
             <div class="row">
                 <div class="input-field col s8">
                     <i class="material-icons prefix">list</i>
-                    <input id="description" type="text" name="description" class="validate">
+                    <input id="description" type="text" name="description" class="validate" placeholder="Add Task Title">
                     <label for="description">Task Title</label>
                 </div>
 
                 <div class="input-field col s8">
                     <i class="material-icons prefix">list</i>
-                    <textarea name="details" id="details" cols="30" rows="10" class="validate"></textarea>
-                    <label for="description">Details</label>
+                    <textarea name="details" class="materialize-textarea active" placeholder="Add Details here"></textarea>
+                    <label for="details">Details</label>
                 </div>
 
                 <button class="btn waves-effect waves-light col s2 offset-s2" type="submit">Add Task

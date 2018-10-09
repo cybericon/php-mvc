@@ -10,33 +10,40 @@
     <?php else: ?>
         <form action="/update-task" method="POST">
         <li class="collection-header">
-            <input type="text" name="description" value = "<?=$task->description?>" >
+        <div class="input-field">
+           <input type="text" name="description" value = "<?=$task->description?>" >
+           <label class="active" for="description">Title</label>
+        </div>
         </li>
 
         <li class="collection-item">
-            <p>
-            <textarea name="details" cols="30" rows="10"><?=$task->details?></textarea>
-            </p>
+            <div class="input-field">
+                <textarea name="details" class="materialize-textarea"><?=$task->details?></textarea>
+                <label for="details">Details</label>
+            </div>
         </li>
         <li class="collection-item">
             <input type="hidden" name="id" value ="<?=$task->id?>" >
-            <label>
-                <input class="with-gap" name="completed" type="radio" value="0" <?php echo $task->completed == 0 ? 'checked' : ''; ?> >
-                <span>Incomplete</span>
-            </label>
-            <label>
-                <input class="with-gap" name="completed" type="radio" value="1" <?php echo $task->completed == 0 ? '' : 'checked'; ?> >
-                <span>completed</span>
-            </label>
-            <label>
-                <button class='blue btn btn-medium with-gap' type='submit'><i class="material-icons left">edit</i>Update Task</button>
-            </label>
+
+                <label>
+                    <input class="with-gap" name="completed" type="radio" value="0" <?php echo $task->completed == 0 ? 'checked' : ''; ?> >
+                    <span>Incomplete</span>
+                </label>
+                <label>
+                    <input class="with-gap" name="completed" type="radio" value="1" <?php echo $task->completed == 0 ? '' : 'checked'; ?> >
+                    <span>completed</span>
+                </label>
+            <div class="input-field">
+                    <button class='blue btn btn-medium with-gap' type='submit'><i class="material-icons left">edit</i>Update Task</button>
+            <div>
         </li>
         </form>
         <li class="collection-item">
             <form action="/delete-task" method="POST" class="col s1">
                 <input type="hidden" name="id" value=<?=$task->id?> >
-                <button class='red btn btn-medium with-gap' type='submit'><i class="material-icons left">delete</i>Remove Task</button>
+                <div class="input-field">
+                    <button class='red btn btn-medium with-gap' type='submit'><i class="material-icons left">delete</i>Remove Task</button>
+                </div>
             </form>
         </li>
     <?php endif;?>
