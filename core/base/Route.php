@@ -35,7 +35,7 @@ class Route
     {
 
         if (!key_exists($uri, self::$routes[$method])) {
-            if (strpos($uri, '/')) {
+            if (strpos($uri, '/') > 0) {
                 $arg = substr($uri, strpos($uri, '/') + 1);
 
                 $keys = array_keys(self::$routes[$method]);
@@ -51,10 +51,9 @@ class Route
                 });
                 $target = array_values($target);
                 $request_url = self::$routes[$method][$target[0]];
-                $args[] = $arg;
 
                 $method_parameters = explode('@', $request_url);
-                $method_parameters[] = $args;
+                $method_parameters[] = $arg;
                 self::callAction(
                     ...$method_parameters
                 );
@@ -64,10 +63,10 @@ class Route
             }
         } else {
             $request_url = self::$routes[$method][$uri];
-            $args = [];
+            $arg = '';
 
             $method_parameters = explode('@', $request_url);
-            $method_parameters[] = $args;
+            $method_parameters[] = $arg;
             self::callAction(
                 ...$method_parameters
             );
@@ -80,7 +79,7 @@ class Route
      * This method create new instance of Controller class and
      * call the action assigned in routes.
      */
-    private static function callAction($controller, $action, $args = [])
+    private static function callAction($controller, $action, $arg = '')
     {
         $controller = "App\\Controllers\\{$controller}";
         $controller = new $controller;
@@ -89,7 +88,7 @@ class Route
             echo "Method {$action} is not defined in {$controller}";
             die();
         }
-        $controller->$action($args);
+        $controller->$action($arg);
 
     }
 }
