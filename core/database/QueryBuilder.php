@@ -11,22 +11,30 @@ class QueryBuilder
         return $this->pdo = $pdo;
     }
 
-    public function selectAll($table)
+    public function selectAll($table, $class = '')
     {
         $statement = $this->pdo->prepare("select * from {$table}");
         $statement->execute();
-        return $statement->fetchAll(\PDO::FETCH_CLASS);
+        if (empty($class)) {
+            return $statement->fetchAll(\PDO::FETCH_CLASS);
+        }
+        return $statement->fetchAll(\PDO::FETCH_CLASS, $class);
     }
 
-    public function get($table, $id)
+    public function get($table, $id, $class = '')
     {
         $statement = $this->pdo->prepare("select * from {$table} where id={$id}");
         $statement->execute();
-        return $statement->fetch(\PDO::FETCH_OBJ);
+        if (!empty($class)) {
+            $statement->setFetchMode(\PDO::FETCH_CLASS, $class);
+        }
+        return $statement->fetch();
+
     }
 
     public function insert($table, $params)
     {
+        $params = $this->normalize($params);
 
         $sql = sprintf(
             'insert into %s (%s) values (%s)',
@@ -37,9 +45,7 @@ class QueryBuilder
 
         $statement = $this->pdo->prepare($sql);
         $statement->execute($params);
-
         // insert into table (keys) values (values)
-
     }
 
     public function delete($table, $row_id)
@@ -51,8 +57,11 @@ class QueryBuilder
 
     }
 
+    // TODO: refactor update method
     public function update($table, $params)
     {
+        $params = $this->normalize($params);
+
         $sql = sprintf(
             'UPDATE %s SET %s=%s WHERE id=%s',
             $table,
@@ -63,6 +72,17 @@ class QueryBuilder
 
         $statement = $this->pdo->prepare($sql);
         $statement->execute($params);
+    }
+
+    /**
+     * @param params array to be processed
+     * @return array of normalize values
+     */
+    private function normalize(array $params): array
+    {
+        return array_map(function ($param) {
+            return \htmlspecialchars($param);
+        }, $params);
     }
 
 }
