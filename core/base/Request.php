@@ -16,6 +16,14 @@ class Request
 
     public static function get($key)
     {
-        return $_REQUEST[$key];
+        return \htmlspecialchars($_REQUEST[$key]);
+    }
+
+    public static function all()
+    {
+        array_walk($_REQUEST, function (&$val, $key) {
+            $val = \htmlspecialchars($val);
+        });
+        return $_REQUEST;
     }
 }
