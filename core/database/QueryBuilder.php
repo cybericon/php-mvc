@@ -2,6 +2,8 @@
 
 namespace Core\Database;
 
+use Core\Base\Request;
+
 class QueryBuilder
 {
     protected $pdo;
@@ -34,7 +36,6 @@ class QueryBuilder
 
     public function insert($table, $params)
     {
-        $params = $this->normalize($params);
 
         $sql = sprintf(
             'insert into %s (%s) values (%s)',
@@ -57,18 +58,38 @@ class QueryBuilder
 
     }
 
-    // TODO: refactor update method
-    public function update($table, $params)
+    public function update($table, array $fillable)
     {
-        $params = $this->normalize($params);
+        // initialize an array with values:
+        $params = [];
 
-        $sql = sprintf(
-            'UPDATE %s SET %s=%s WHERE id=%s',
-            $table,
-            array_keys($params)[0],
-            ":" . array_keys($params)[0],
-            ":" . array_keys($params)[1]
-        );
+        // initialize a string with `fieldname` = :placeholder pairs
+        $setStr = "";
+
+        // loop over source data array
+        foreach ($fillable as $key) {
+            if (!empty([$key]) || $key != "" || $key != null) {
+
+                if (Request::get($key) != null) {
+
+                    $setStr .= "`$key` = :$key ,";
+                    $params[$key] = Request::get($key);
+
+                } else {
+
+                    $setStr .= "`$key` = $key ,";
+
+                }
+
+            } else {
+
+            }
+        }
+        $setStr = rtrim($setStr, ",");
+
+        $params['id'] = Request::get('id');
+
+        $sql = "UPDATE $table SET $setStr WHERE id = :id";
 
         $statement = $this->pdo->prepare($sql);
         $statement->execute($params);
@@ -78,11 +99,8 @@ class QueryBuilder
      * @param params array to be processed
      * @return array of normalize values
      */
-    private function normalize(array $params): array
+    private function normalize()
     {
-        return array_map(function ($param) {
-            return \htmlspecialchars($param);
-        }, $params);
+        //
     }
-
 }

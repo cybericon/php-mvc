@@ -35,9 +35,9 @@ class Model
         return App::get('database')->insert(static::$table, $params);
     }
 
-    public static function edit($params)
+    public static function edit(array $fillable)
     {
-        return App::get('database')->update(static::$table, $params);
+        return App::get('database')->update(static::$table, $fillable);
     }
 
     public function addProperty($property, $value)

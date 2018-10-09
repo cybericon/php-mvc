@@ -48,12 +48,9 @@ class TasksController extends Controller
 
     public function update()
     {
-        Task::edit(
-            [
-                "completed" => (int) $_POST['completed'],
-                "id" => (int) $_POST['id'],
-            ]
-        );
+        $fillable = ["description", "details", "completed"];
+
+        Task::edit($fillable);
         $this->redirect('/tasks');
     }
 }
