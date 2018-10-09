@@ -33,27 +33,40 @@ class Route
      */
     public static function direct($uri, $method)
     {
-
+        // checking if requested url is not in defined routes
         if (!key_exists($uri, self::$routes[$method])) {
+            // checking if requested url resemble format model/{model}
             if (strpos($uri, '/') > 0) {
+
+                // extracting arg from url( 23 from model/23 )
                 $arg = substr($uri, strpos($uri, '/') + 1);
 
-                $keys = array_keys(self::$routes[$method]);
+                // extracting resource from url( model from model/23 )
+                $resource = substr($uri, 0, strpos($uri, '/') + 1);
 
-                $item = substr($uri, 0, strpos($uri, '/'));
-                $item = $item . "/";
+                // all defined keys/resources in routes
+                $route_keys = array_keys(self::$routes[$method]);
 
-                $target = array_filter($keys, function ($val) use ($item) {
-                    if (strstr($val, $item)) {
-                        return true;
+                // building url pattern to look in routes ( model/{id} )
+                $target;
+                array_filter($route_keys, function ($val) use ($resource, &$target) {
+                    if (strstr($val, $resource)) {
+                        $target = $val;
+                        return;
                     }
-                    return false;
+                    return;
                 });
-                $target = array_values($target);
-                $request_url = self::$routes[$method][$target[0]];
 
-                $method_parameters = explode('@', $request_url);
+                // extracting action assign to route ( modeController@action )
+                $request_action = self::$routes[$method][$target];
+
+                // Preparing array of parameters for callAction method callAction(controller, method, arg)
+                // exploding request_action to add first two parameters i.e. controller, method
+                $method_parameters = explode('@', $request_action);
+                // Adding 3rd parameter to prepared array
                 $method_parameters[] = $arg;
+
+                // Calling action method
                 self::callAction(
                     ...$method_parameters
                 );
@@ -62,11 +75,18 @@ class Route
                 echo "<h1> 404!!! Page not found</h1>";
             }
         } else {
-            $request_url = self::$routes[$method][$uri];
+            // Action assigned to route
+            $request_action = self::$routes[$method][$uri];
+            // preparing empy arg
             $arg = '';
 
-            $method_parameters = explode('@', $request_url);
+            // Preparing array of parameters for callAction method callAction(controller, method, arg)
+            // exploding request_action to add first two parameters i.e. controller, method
+            $method_parameters = explode('@', $request_action);
+            // Adding 3rd parameter to prepared array
             $method_parameters[] = $arg;
+
+            // Calling action method
             self::callAction(
                 ...$method_parameters
             );
